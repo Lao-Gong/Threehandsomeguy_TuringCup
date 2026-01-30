@@ -1,37 +1,35 @@
-import pandas as pd
-from utils import *
+# main.py中使用新的utils模块
+import utils
 
-
-########Your Model
-class MyModel:
-    def __init__(self):
-        pass
-
-    def predict(self, input_frame):
-        pre= input_frame['AskVolume1'] + input_frame['BidVolume1']
-        return pre
-
-
-def do_test():
-    target_name_list = get_target_name("./data")
+def main():
+    print("股票收益率预测程序启动")
     
-    ########Load Your Model
-    model = MyModel()
-    for target_name in target_name_list:
-        ##########Load Test Data
-        input_frame = pd.read_csv("./data/"+target_name)
-
-        ##########Your Predict
-        pre_frame = model.predict(input_frame)
-
-        ##########Save Your Data
-        out_frame = pd.concat([input_frame['Time'], pre_frame], axis=1, ignore_index=True)
-        columns = ['Time', 'Predict']
-        out_frame.columns = columns
-        out_frame.to_csv("./output/"+target_name, index=False)
-
-        print ("Predict", target_name)
-
+    # 1. 加载数据
+    all_data = utils.load_all_data("./data")
     
-if __name__ == '__main__':
-    do_test()
+    # 2. 数据清洗和特征计算
+    processed_data = {}
+    for stock_name, raw_data in all_data.items():
+        if not raw_data.empty:
+            # 使用utils模块中的函数
+            cleaned = utils.clean_data(raw_data, stock_name)
+            with_features = utils.calculate_basic_features(cleaned, stock_name)
+            processed_data[stock_name] = with_features
+    
+    # 3. 数据验证和报告
+    for stock_name, data in processed_data.items():
+        utils.validate_data_quality(data, stock_name)
+    
+    utils.generate_data_report(processed_data)
+    
+    # 4. 保存数据
+    for stock_name, data in processed_data.items():
+        if not data.empty:
+            filename = f"stock_{stock_name}_processed.csv"
+            saved_path = utils.save_processed_data(data, filename)
+            print(f"✅ 保存: {saved_path}")
+    
+    return processed_data
+
+if __name__ == "__main__":
+    result = main()
