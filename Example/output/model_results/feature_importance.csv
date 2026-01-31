@@ -1,0 +1,11 @@
+feature,importance,feature_name
+f9,11.0,high_5min
+f27,10.0,volatility_5min
+f5,8.0,mid_price
+f0,6.0,BidPrice4
+f2,5.0,BidPrice2
+f3,3.0,BidPrice5
+f1,1.0,BidPrice3
+f4,1.0,BidPrice1
+f7,1.0,AskPrice2
+f6,1.0,AskPrice1
