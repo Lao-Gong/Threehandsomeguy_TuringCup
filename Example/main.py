@@ -7,7 +7,7 @@ def main():
     # 1. 加载数据
     all_data = utils.load_all_data("./data")
     
-    # 2. 数据清洗和特征计算
+    # 2. 数据清洗和特征计算ddd
     processed_data = {}
     for stock_name, raw_data in all_data.items():
         if not raw_data.empty:
